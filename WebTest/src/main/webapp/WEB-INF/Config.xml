@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+<!--Definition of View Resolver -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<!-- 		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.JstlView</value>
+		</property> -->
+		<property name="prefix">
+			<value>/WEB-INF/view/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<!--Request Mapping -->
+	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/login.do">loginAction</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!---Action Definition-->
+	<bean id="loginAction" class="Action.LoginAction">
+		<property name="failView"> 
+			<value>loginfail</value>
+		</property>
+		<property name="successView">
+			<value>loginsuccess</value>
+		</property>
+	</bean>
+</beans>
