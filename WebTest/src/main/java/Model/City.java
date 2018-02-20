@@ -3,6 +3,7 @@ package Model;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -75,6 +76,8 @@ public class City {
 		methodSetName.invoke(city, new String[]{"Beijing"});
 		Method methodGetName = cityClass.getMethod("getName");
 		System.out.println(methodGetName.invoke(city, null));
+		
+//		new ReentrantLock();
 	}
 	
 	
