@@ -28,6 +28,35 @@ public class ExcelParser {
 	private static Workbook workbook = null;
 	private static HashMap<Integer, String> col2nameMap;
 	
+	public static ExcelData parseXlsx(InputStream is){
+		if(is == null){
+			return null;
+		}
+		try {
+			workbook = new XSSFWorkbook(is);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(is != null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		ExcelData excelData = new ExcelData();
+		parseContent(excelData);
+		parseTree(excelData);
+		
+		
+		return excelData;
+	}
+	
 	public static ExcelData parseXlsx(String path){
 		if(path == null){
 			System.err.println("Xlsx file path is null");
