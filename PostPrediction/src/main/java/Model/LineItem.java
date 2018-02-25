@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.regex.Pattern;
+
 import Utility.AddPrefixZero;
 
 public class LineItem {
@@ -66,5 +68,58 @@ public class LineItem {
 		profitCenter = AddPrefixZero.addPrefixZero(profitCenter, ProfitCenterMasterData.LENGTH);
 		
 		return true;
+	}
+	
+	public boolean checkAccountNumber(){
+		if(this.accountNumber != null){
+			if(this.accountNumber.trim().length() > AccountMasterData.LENGTH){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkDebit(){
+		if(this.debit != null){
+			Pattern pattern = Pattern.compile("^[-\\+]?[\\d\\.]*$"); 
+			if(!pattern.matcher(this.debit.trim()).matches()){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkCredit(){
+		if(this.credit != null){
+			Pattern pattern = Pattern.compile("^[-\\+]?[\\d\\.]*$"); 
+			if(!pattern.matcher(this.credit.trim()).matches()){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkCostCenter(){
+		if(this.costCenter != null){
+			if(this.costCenter.trim().length() > CostCenterMasterData.LENGTH){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkProfitCenter(){
+		if(this.profitCenter != null){
+			if(this.profitCenter.trim().length() > ProfitCenterMasterData.LENGTH){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static void main(String[] args){
+		LineItem lineitem = new LineItem();
+		lineitem.setDebit(" 34a54");
+		System.out.println(lineitem.checkDebit());
 	}
 }

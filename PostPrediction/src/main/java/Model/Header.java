@@ -1,5 +1,8 @@
 package Model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class Header {
 	private String companyCode;
 	private String fiscalYear;
@@ -48,6 +51,36 @@ public class Header {
 		return "Header [companyCode=" + companyCode + ", fiscalYear=" + fiscalYear + ", journalEntryType="
 				+ journalEntryType + ", transactionCurrency=" + transactionCurrency + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((companyCode == null) ? 0 : companyCode.hashCode());
+		result = prime * result + ((journalEntryType == null) ? 0 : journalEntryType.hashCode());
+		result = prime * result + ((transactionCurrency == null) ? 0 : transactionCurrency.hashCode());
+		return result;
+	}
+
+	public boolean checkCompanyCode(){
+		if(this.companyCode != null){
+			if(this.companyCode.length() > 4){
+				return false;
+			}
+		}
+		return true;
+	}
 	
+	public boolean checkFiscalYear(){
+		if(this.fiscalYear != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				sdf.parse(this.fiscalYear);
+			} catch (ParseException e) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 }

@@ -36,8 +36,11 @@
 
 <!-- 默认装配 -->
     <mvc:annotation-driven></mvc:annotation-driven>
-    <bean id="uploadAction" class="Action.UploadAction">
-    </bean>
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
+    <bean id="uploadAction" class="Action.UploadAction"></bean>
+    <bean id="predictAction" class="Action.PredictAction"></bean>
+    <bean id="predictionService" class="Service.PredictionService"></bean>
+    
 	<!--Request Mapping -->
 <!-- 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> -->
 <!-- 		<property name="mappings"> -->
