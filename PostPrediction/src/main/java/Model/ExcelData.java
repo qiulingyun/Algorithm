@@ -6,7 +6,7 @@ public class ExcelData {
 	private ArrayList<Post> postList;
 	private ArrayList<TreeNode> costCenterRootList;
 	private ArrayList<TreeNode> profitCenterRootList;
-	
+	private ArrayList<AccountMasterData> accountMasterDataList;
 	
 	
 	public ExcelData() {
@@ -14,6 +14,7 @@ public class ExcelData {
 		postList = new ArrayList<Post>();
 		costCenterRootList = new ArrayList<TreeNode>();
 		profitCenterRootList = new ArrayList<TreeNode>();
+		accountMasterDataList = new ArrayList<AccountMasterData>();
 	}
 
 
@@ -50,6 +51,18 @@ public class ExcelData {
 
 	public void setProfitCenterRootList(ArrayList<TreeNode> profitCenterRootList) {
 		this.profitCenterRootList = profitCenterRootList;
+	}
+
+
+
+	public ArrayList<AccountMasterData> getAccountMasterDataList() {
+		return accountMasterDataList;
+	}
+
+
+
+	public void setAccountMasterDataList(ArrayList<AccountMasterData> accountMasterDataList) {
+		this.accountMasterDataList = accountMasterDataList;
 	}
 
 	

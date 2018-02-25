@@ -20,13 +20,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
+import Model.AccountMasterData;
 import Model.ExcelData;
+import Model.Header;
+import Model.LineItem;
 import Model.Post;
 import Model.TreeNode;
 
 public class ExcelParser {
 	private static Workbook workbook = null;
-	private static HashMap<Integer, String> col2nameMap;
 	
 	public static ExcelData parseXlsx(InputStream is){
 		if(is == null){
@@ -52,6 +54,7 @@ public class ExcelParser {
 		ExcelData excelData = new ExcelData();
 		parseContent(excelData);
 		parseTree(excelData);
+		parseMasterData(excelData);
 		
 		
 		return excelData;
@@ -88,7 +91,7 @@ public class ExcelParser {
 		ExcelData excelData = new ExcelData();
 		parseContent(excelData);
 		parseTree(excelData);
-		
+		parseMasterData(excelData);
 		
 		return excelData;
 		
@@ -104,23 +107,35 @@ public class ExcelParser {
 			return;
 		}
 
-		if(getFieldNameMapping() == false){
+		HashMap<Integer, String> col2nameMap = getFieldNameMapping(0);
+		if(col2nameMap == null){
 			return;
 		}
 		
 		Sheet content = workbook.getSheetAt(0);
 		int firstRowNumber = content.getFirstRowNum();
 		int lastRowNumber = content.getLastRowNum();
+		int prevRowNum = -1;
+		Post post = null;
 		for(int i = firstRowNumber + 1; i < lastRowNumber + 1; i++){
 			Row row = content.getRow(i);
-			Post post = new Post();
-			if(mapRow2Model(row, post) == false){
-				System.err.println("Error in index:" + (i + 1));
+			Post tmpPost = new Post();
+			if(mapRow2Model(row, tmpPost, col2nameMap) == false){
+				continue;	//blank line
 			}
-			if(post.addPrefixZero() == false){
-				continue;
+			
+			int currRowNum = row.getRowNum();
+			int rowNumDiff = currRowNum - prevRowNum;
+			
+			if(rowNumDiff > 1){
+				post = new Post(tmpPost);
+				postList.add(post);
+			}else{
+				post.getLineItems().addAll(tmpPost.getLineItems());
 			}
-			postList.add(post);
+			
+			
+			prevRowNum = currRowNum;
 		}
 	}
 	
@@ -225,6 +240,38 @@ public class ExcelParser {
 		
 	}
 	
+	private static void parseMasterData(ExcelData excelData){
+		if(excelData == null){
+			return;
+		}
+		
+		ArrayList<AccountMasterData> accountMasterDataListList = excelData.getAccountMasterDataList();
+		if(accountMasterDataListList == null){
+			return;
+		}
+
+		HashMap<Integer, String> col2nameMap = getFieldNameMapping(3);
+		if(col2nameMap == null){
+			return;
+		}
+		
+		Sheet content = workbook.getSheetAt(3);
+		int firstRowNumber = content.getFirstRowNum();
+		int lastRowNumber = content.getLastRowNum();
+
+		
+		for(int i = firstRowNumber + 1; i < lastRowNumber + 1; i++){
+			Row row = content.getRow(i);
+			AccountMasterData master = new AccountMasterData();
+			if(mapRow2ModelMasterData(row, master, col2nameMap) == false){
+				continue;	//blank line
+			}
+			
+			accountMasterDataListList.add(master);
+			
+		}
+	}
+	
 	private static String getCellValue(Cell cell){
 		if(cell == null){
 			return null;
@@ -255,10 +302,15 @@ public class ExcelParser {
 		default:
 			break;
 		}
+		
+		if(cellVal == null){
+			return null;
+		}
+		
 		return cellVal.trim();
 	}
 	
-	private static boolean mapRow2Model(Row row, Post post){
+	private static boolean mapRow2Model(Row row, Post post, HashMap<Integer, String> col2nameMap){
 		if(row == null || post == null){
 			return false;
 		}
@@ -275,15 +327,22 @@ public class ExcelParser {
 		}
 		
 		BeanWrapper postWrapper = new BeanWrapperImpl(post);
+		Header header = post.getHeader();
+		LineItem lineItem = new LineItem();
+		post.getLineItems().add(lineItem);
+		BeanWrapper headerWrapper = new BeanWrapperImpl(header);
+		BeanWrapper itemWrapper = new BeanWrapperImpl(lineItem);
 		
 		short counter = 0;
 		for(short i = firstCellNum; i < lastCellNum; i++){
 			Cell cell = row.getCell(i);
 			if(cell == null){
+				counter++;
 				continue;
 			}
 			String cellVal = getCellValue(cell);
 			if(cellVal == null){
+				counter++;
 				continue;
 			}
 			
@@ -293,26 +352,91 @@ public class ExcelParser {
 			if(fieldName == null || fieldName.isEmpty()){
 				continue;
 			}
-			postWrapper.setPropertyValue(fieldName, cellVal);
-			counter++;
+			
+			if(postWrapper.isWritableProperty(fieldName)){
+				postWrapper.setPropertyValue(fieldName, cellVal);
+			}else if(headerWrapper.isWritableProperty(fieldName)){
+				headerWrapper.setPropertyValue(fieldName, cellVal);
+			}else if(itemWrapper.isWritableProperty(fieldName)){
+				itemWrapper.setPropertyValue(fieldName, cellVal);
+				lineItem.addPrefixZero();
+			}else{
+				continue;
+			}
+			
+//			postWrapper.setPropertyValue(fieldName, cellVal);
+			
 		}
-		if(counter != cellNum){
-			System.err.println("Not all fields in post is correctly filled");
+		if(counter == cellNum){	//empty line
+//			System.err.println("Not all fields in post is correctly filled");
 			return false;
 		}
 		
 		return true;
 	}
 	
-	private static boolean getFieldNameMapping(){
-		if(workbook == null){
-			System.err.println("workbook is null");
+	private static boolean mapRow2ModelMasterData(Row row, AccountMasterData master, HashMap<Integer, String> col2nameMap){
+		if(row == null || master == null){
 			return false;
 		}
 		
-		col2nameMap = new HashMap<Integer, String>();
+		short firstCellNum = row.getFirstCellNum();
+		short lastCellNum = row.getLastCellNum();
+		short cellNum = (short) (lastCellNum - firstCellNum);
+		if(firstCellNum == -1 || lastCellNum == -1 || cellNum == 0){
+			return false;
+		}
 		
-		Sheet content = workbook.getSheetAt(0);
+		if(col2nameMap == null){
+			return false;
+		}
+		
+		BeanWrapper wrapper = new BeanWrapperImpl(master);
+		
+		short counter = 0;
+		for(short i = firstCellNum; i < lastCellNum; i++){
+			Cell cell = row.getCell(i);
+			if(cell == null){
+				counter++;
+				continue;
+			}
+			String cellVal = getCellValue(cell);
+			if(cellVal == null){
+				counter++;
+				continue;
+			}
+			
+			
+			int cellIndex = cell.getColumnIndex();
+			String fieldName = col2nameMap.get(cellIndex);
+			if(fieldName == null || fieldName.isEmpty()){
+				continue;
+			}
+			
+			if(wrapper.isWritableProperty(fieldName)){
+				wrapper.setPropertyValue(fieldName, cellVal);
+			}
+			
+//			postWrapper.setPropertyValue(fieldName, cellVal);
+			
+		}
+		if(counter == cellNum){	//empty line
+//			System.err.println("Not all fields in post is correctly filled");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static HashMap<Integer, String> getFieldNameMapping(int sheetIndex){
+		if(workbook == null){
+			System.err.println("workbook is null");
+			return null;
+		}
+		
+		HashMap<Integer, String> col2nameMap = new HashMap<Integer, String>();
+		
+		Sheet content = workbook.getSheetAt(sheetIndex);
 		int firstRowNumber = content.getFirstRowNum();
 		Row firstRow = content.getRow(firstRowNumber);
 		
@@ -332,10 +456,10 @@ public class ExcelParser {
 		
 		if(col2nameMap.size() != cellNum){
 			System.err.println("Not all cell parsed!");
-			return false;
+			return col2nameMap;
 		}
 		
-		return true;
+		return col2nameMap;
 	}
 	
 	private static class CellInfo{
@@ -369,5 +493,8 @@ public class ExcelParser {
 		System.out.println(TreeHelper.findByLevel(costCenterRootList.get(1), 0));
 		System.out.println(TreeHelper.findByLevel(costCenterRootList.get(1), 1));
 		System.out.println(TreeHelper.findByLevel(costCenterRootList.get(1), 2));
+		
+		ArrayList<AccountMasterData> masterDataList = excelData.getAccountMasterDataList();
+		System.out.println(masterDataList);
 	}
 }

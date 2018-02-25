@@ -1,102 +1,66 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import Utility.AddPrefixZero;
 
 public class Post {
-	private String companyCode;
-	private String fiscalYear;
-	private String accountNumber;
-	private String costCenter;
-	private String profitCenter;
-	private AccountMasterData accountMasterData;
-	private CostCenterMasterData costCenterMasterData;
-	private ProfitCenterMasterData profitCenterMasterData;
+	private String business;
+	private Header header;
+	private ArrayList<LineItem> lineItems;
 	
 	public Post() {
 		super();
-		// TODO Auto-generated constructor stub
+		header = new Header();
+		lineItems = new ArrayList<LineItem>();
+		business = new String();
 	}
 
-	public String getCompanyCode() {
-		return companyCode;
+	public Post(Header header, ArrayList<LineItem> lineItems) {
+		super();
+		this.header = header;
+		this.lineItems = lineItems;
+	}
+	
+	public Post(Post other){
+		super();
+		this.business = other.getBusiness();
+		this.header = other.getHeader();
+		this.lineItems = other.getLineItems();
+	}
+	
+
+	public String getBusiness() {
+		return business;
 	}
 
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
+	public void setBusiness(String business) {
+		this.business = business;
 	}
 
-	public String getFiscalYear() {
-		return fiscalYear;
+	public Header getHeader() {
+		return header;
 	}
 
-	public void setFiscalYear(String fiscalYear) {
-		this.fiscalYear = fiscalYear;
+	public void setHeader(Header header) {
+		this.header = header;
 	}
 
-	public String getAccountNumber() {
-		return accountNumber;
+	public ArrayList<LineItem> getLineItems() {
+		return lineItems;
 	}
 
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-
-	public String getCostCenter() {
-		return costCenter;
-	}
-
-	public void setCostCenter(String costCenter) {
-		this.costCenter = costCenter;
-	}
-
-	public String getProfitCenter() {
-		return profitCenter;
-	}
-
-	public void setProfitCenter(String profitCenter) {
-		this.profitCenter = profitCenter;
-	}
-
-	public AccountMasterData getAccountMasterData() {
-		return accountMasterData;
-	}
-
-	public void setAccountMasterData(AccountMasterData accountMasterData) {
-		this.accountMasterData = accountMasterData;
-	}
-
-	public CostCenterMasterData getCostCenterMasterData() {
-		return costCenterMasterData;
-	}
-
-	public void setCostCenterMasterData(CostCenterMasterData costCenterMasterData) {
-		this.costCenterMasterData = costCenterMasterData;
-	}
-
-	public ProfitCenterMasterData getProfitCenterMasterData() {
-		return profitCenterMasterData;
-	}
-
-	public void setProfitCenterMasterData(ProfitCenterMasterData profitCenterMasterData) {
-		this.profitCenterMasterData = profitCenterMasterData;
+	public void setLineItems(ArrayList<LineItem> lineItems) {
+		this.lineItems = lineItems;
 	}
 
 	@Override
 	public String toString() {
-		return "Post [companyCode=" + companyCode + ", fiscalYear=" + fiscalYear + ", accountNumber=" + accountNumber
-				+ ", costCenter=" + costCenter + ", profitCenter=" + profitCenter + ", accountMasterData="
-				+ accountMasterData + ", costCenterMasterData=" + costCenterMasterData + ", profitCenterMasterData="
-				+ profitCenterMasterData + "]";
+		return "Post [business=" + business + ", header=" + header + ", lineItems=" + lineItems + "]";
 	}
+
 	
-	public boolean addPrefixZero(){
-		accountNumber = AddPrefixZero.addPrefixZero(accountNumber, AccountMasterData.LENGTH);
-		costCenter = AddPrefixZero.addPrefixZero(costCenter, CostCenterMasterData.LENGTH);
-		profitCenter = AddPrefixZero.addPrefixZero(profitCenter, ProfitCenterMasterData.LENGTH);
-		
-		return true;
-	}
+	
 	
 }

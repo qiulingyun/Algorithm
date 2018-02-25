@@ -35,7 +35,7 @@ public class PredictionService {
 					if(post == null){
 						continue;
 					}
-					String cocd = post.getCompanyCode();
+					String cocd = post.getHeader().getCompanyCode();
 					ArrayList<Post> dataList = cocd2postMap.get(cocd);
 					if(dataList == null){
 						dataList = new ArrayList<Post>();
