@@ -2,11 +2,13 @@ package Action;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,6 +104,28 @@ public class PredictAction {
 		post.getLineItems().add(lineItem2);
 		
 		Post predictPost = predictionService.doPredict(post);
+		ArrayList<LineItem> predictLineItems = predictPost.getLineItems();
+		for(int i = 0; i < predictLineItems.size(); i++){
+			LineItem lineitem = predictLineItems.get(i);
+			switch (i) {
+			case 0:
+				modelAndView.addObject("accountNumber1", lineitem.getAccountNumber());
+				modelAndView.addObject("debit1", lineitem.getDebit());
+				modelAndView.addObject("credit1", lineitem.getCredit());
+				modelAndView.addObject("costCenter1", lineitem.getCostCenter());
+				modelAndView.addObject("profitCenter1", lineitem.getProfitCenter());
+				break;
+			case 1:
+				modelAndView.addObject("accountNumber2", lineitem.getAccountNumber());
+				modelAndView.addObject("debit2", lineitem.getDebit());
+				modelAndView.addObject("credit2", lineitem.getCredit());
+				modelAndView.addObject("costCenter2", lineitem.getCostCenter());
+				modelAndView.addObject("profitCenter2", lineitem.getProfitCenter());
+				break;
+			default:
+				break;
+			}
+		}
 		
 		return modelAndView;
 	}

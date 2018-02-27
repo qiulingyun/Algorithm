@@ -1,5 +1,6 @@
 package QLY.TestMaven;
 
+import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -34,5 +35,10 @@ public class App
 		scoreMap2.put("b", "b");
 		scoreMap2.put("d", "d");
 		System.out.println(scoreMap2);
+		
+		HashMap<String, Integer> testMap = new HashMap<String, Integer>();
+		testMap.put("1", 10);
+		testMap.put("1", 12);
+		
     }
 }

@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -38,7 +40,20 @@ public class PredictionService {
 		if(header == null){
 			return null;
 		}
+		
+		Set<Header> set = header2postMap.keySet();
+		for(Iterator<Header> iter = set.iterator(); iter.hasNext(); ){
+			Header header1 = iter.next();
+			if(header1.getCompanyCode() == header.getCompanyCode() &&
+					header1.getJournalEntryType() == header.getJournalEntryType() &&
+					header1.getTransactionCurrency() == header.getTransactionCurrency()){
+				System.out.println("Found!!!!");
+			}
+		}
 		ArrayList<Post> postList = header2postMap.get(header);
+		if(postList == null){
+			return null;
+		}
 		SortedMap<Double, ArrayList<Post>> scoreMap = new TreeMap<Double, ArrayList<Post>>();
 		for(int i = 0; i < postList.size(); i++){
 			Post postTmp = postList.get(i);
