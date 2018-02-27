@@ -27,9 +27,10 @@ public class PredictAction {
 	
 	
 	@RequestMapping(value="/predict.do",method=RequestMethod.POST)
-	public String processUpload(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public ModelAndView processPredict(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		ModelAndView modelAndView = new ModelAndView("index");
 		if(predictionService == null || predictionService.isInitialized() == false){
-			return "error";
+			return modelAndView;
 		}
 		
 		String fiscalYear = request.getParameter("fiscalYear");
@@ -53,9 +54,9 @@ public class PredictAction {
 		header.setJournalEntryType(journalEntryType);
 		header.setTransactionCurrency(transactionCurrency);
 		if(!header.checkCompanyCode()){
-			return "error";
+			return modelAndView;
 		}else if(!header.checkFiscalYear()){
-			return "error";
+			return modelAndView;
 		}
 		
 		LineItem lineItem1 = new LineItem(), lineItem2 = new LineItem();
@@ -66,15 +67,15 @@ public class PredictAction {
 		lineItem1.setCostCenter(costCenter1);
 		lineItem1.addPrefixZero();
 		if(!lineItem1.checkAccountNumber()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem1.checkDebit()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem1.checkCredit()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem1.checkProfitCenter()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem1.checkCostCenter()){
-			return "error";
+			return modelAndView;
 		}
 		
 		lineItem2.setAccountNumber(accountNumber2);
@@ -84,15 +85,15 @@ public class PredictAction {
 		lineItem2.setCostCenter(costCenter2);
 		lineItem2.addPrefixZero();
 		if(!lineItem2.checkAccountNumber()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem2.checkDebit()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem2.checkCredit()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem2.checkProfitCenter()){
-			return "error";
+			return modelAndView;
 		}else if(!lineItem2.checkCostCenter()){
-			return "error";
+			return modelAndView;
 		}
 		
 		Post post = new Post();
@@ -100,10 +101,9 @@ public class PredictAction {
 		post.getLineItems().add(lineItem1);
 		post.getLineItems().add(lineItem2);
 		
+		Post predictPost = predictionService.doPredict(post);
 		
-	
-		
-		return "success";
+		return modelAndView;
 	}
 	
 	public PredictionService getPredictionService() {

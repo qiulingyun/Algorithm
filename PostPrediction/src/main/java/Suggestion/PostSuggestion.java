@@ -18,7 +18,7 @@ public class PostSuggestion {
 		
 	}
 	
-	private double calSimilarityByFiscalYear(Header left, Header right) throws ParseException{
+	public double calSimilarityByFiscalYear(Header left, Header right) throws ParseException{
 		if(left == null || right == null){
 			return -1d;
 		}
@@ -42,7 +42,7 @@ public class PostSuggestion {
 		return (1-(dateDiff/30 + monthDiff/11)/2);
 	}
 	
-	private double calSimilarityByCostCenterTree(LineItem left, LineItem right, ExcelData excel){
+	public double calSimilarityByCostCenterTree(LineItem left, LineItem right, ExcelData excel){
 		if(left == null || right == null || excel == null){
 			return -1d;
 		}
@@ -81,7 +81,7 @@ public class PostSuggestion {
 		return (1-(double)Math.abs(leftNode.getLevel() - rightNode.getLevel())/treeLevel);
 	}
 	
-	private double calSimilarityByProfitCenterTree(LineItem left, LineItem right, ExcelData excel){
+	public double calSimilarityByProfitCenterTree(LineItem left, LineItem right, ExcelData excel){
 		if(left == null || right == null || excel == null){
 			return -1d;
 		}
