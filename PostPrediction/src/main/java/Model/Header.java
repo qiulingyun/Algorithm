@@ -20,6 +20,9 @@ public class Header {
 
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
+		if(this.companyCode != null){
+			this.companyCode.trim().toUpperCase();
+		}
 	}
 
 	public String getFiscalYear() {
@@ -28,6 +31,9 @@ public class Header {
 
 	public void setFiscalYear(String fiscalYear) {
 		this.fiscalYear = fiscalYear;
+		if(this.fiscalYear != null){
+			this.fiscalYear.trim();
+		}
 	}
 
 	public String getJournalEntryType() {
@@ -36,6 +42,9 @@ public class Header {
 
 	public void setJournalEntryType(String journalEntryType) {
 		this.journalEntryType = journalEntryType;
+		if(this.journalEntryType != null){
+			this.journalEntryType.trim().toUpperCase();
+		}
 	}
 
 	public String getTransactionCurrency() {
@@ -44,6 +53,9 @@ public class Header {
 
 	public void setTransactionCurrency(String transactionCurrency) {
 		this.transactionCurrency = transactionCurrency;
+		if(this.transactionCurrency != null){
+			this.transactionCurrency.trim().toUpperCase();
+		}
 	}
 
 	@Override
