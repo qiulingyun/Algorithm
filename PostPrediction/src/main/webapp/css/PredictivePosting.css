@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+.title{
+	color: #5999D7;
+}
+
+#choice{
+	width: 100%;
+	border-style: hidden;
+	bgcolor: #5999D7;
+}
+.choice_td{
+	width: 100px;
+	text-align: center;
+	border-style: hidden;
+	background-color: #5999D7;
+	color: #FFFFFF;
+}
+.choice_td_selected{
+	width: 100px;
+	text-align: center;
+	border-style: hidden;
+	background-color: #FFFFFF;
+	color: #5999D7;
+}
+#generate_btn_td{
+	width: 100px;
+	text-align: center;
+	background-color: #FFFFFF;
+	border-style: hidden;
+}
