@@ -5,15 +5,18 @@
 	<Panel headerText="{i18n>selectionPanelTitle}" class="sapUiResponsiveMargin"
 		width="auto">
 		<content>
-			<VBox>
-				<CheckBox text="{i18n>InterCompAdjustCheckBoxText}" />
-				<CheckBox text="{i18n>PayrollCheckBoxText}" />
-				<CheckBox text="{i18n>AccrualCheckBoxText}" />
-				<CheckBox text="{i18n>FinancialAdjustCheckBoxText}" />
+			<VBox id="checkVBox">
+				<CheckBox text="{i18n>InterCompAdjustCheckBoxText}"
+					selected="businesstype>InterCompAdjust" />
+				<CheckBox text="{i18n>PayrollCheckBoxText}" selected="businesstype>Payroll" />
+				<CheckBox text="{i18n>AccrualCheckBoxText}" selected="businesstype>Accrual" />
+				<CheckBox text="{i18n>FinancialAdjustCheckBoxText}"
+					selected="businesstype>FinancialAdjust" />
 			</VBox>
 			<FlexBox alignItems="Start">
 				<items>
-					<SegmentedButton selectedKey="period" class="sapUiBigMarginRight">
+					<SegmentedButton selectedKey="period"
+						class="sapUiResponsiveMargin">
 						<items>
 							<SegmentedButtonItem text="Today" key="period" />
 							<SegmentedButtonItem text="This Week" />
@@ -27,7 +30,8 @@
 					</SegmentedButton>
 
 
-					<Button text="{i18n>GenerateButtonText}" icon="sap-icon://accept" press="onShowHello">
+					<Button text="{i18n>GenerateButtonText}" icon="sap-icon://accept"
+						press="onPredict">
 						<layoutData>
 							<FlexItemData growFactor="1" />
 						</layoutData>
@@ -35,7 +39,40 @@
 				</items>
 			</FlexBox>
 
+			<List id="predictionList" headerText="{i18n>predictionListTitle}"
+				class="sapUiResponsiveMargin" width="auto"
+				items="{
+		         path : 'prediction>/Prediction',
+		         sorter : {
+		            path : 'Business' 
+		         }
+		      }">
+				<headerToolbar>
+					<Toolbar>
+						<Title text="{i18n>predictionListTitle}" />
+						<ToolbarSpacer />
+						<SearchField width="40%" search="onFilterPredictionList" />
+					</Toolbar>
+				</headerToolbar>
+				<items>
+					<ObjectListItem title="{prediction>Business}"
 
+						number="{
+							parts: [{path: 'prediction>Debit'}, {path: 'prediction>TransactionCurrency'}],
+							type: 'sap.ui.model.type.Currency',
+							formatOptions: {
+								showMeasure: false
+							}
+						}"
+						numberUnit="{prediction>TransactionCurrency}">
+						<attributes>
+							<ObjectAttribute
+								text="{prediction>CompanyCode} {prediction>JournalEntryType}" />
+							<ObjectAttribute text="{prediction>FiscalYear}" />
+						</attributes>
+					</ObjectListItem>
+				</items>
+			</List>
 
 			<!-- <Button text="{i18n>showHelloButtonText}" press="onShowHello" -->
 			<!-- class="sapUiSmallMarginEnd" /> -->

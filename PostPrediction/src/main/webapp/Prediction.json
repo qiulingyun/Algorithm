@@ -1,0 +1,53 @@
+{
+  "Prediction": [
+	{
+	  "Business": "Intercompany Adjustment",
+	  "CompanyCode": "1010",
+	  "FiscalYear": "30/11/2017",
+	  "JournalEntryType": "SA",
+	  "TransactionCurrency": "USD",
+	  "Account": "11001010",
+	  "Debit": 100,
+	  "Credit": 0,
+	  "CostCenter": "",
+	  "ProfitCenter": ""
+	},
+	{
+	  "Business": "Payroll",
+	  "CompanyCode": "1010",
+	  "FiscalYear": "30/11/2017",
+	  "JournalEntryType": "SA",
+	  "TransactionCurrency": "EUR",
+	  "Account": "21503000",
+	  "Debit": 200,
+	  "Credit": 0,
+	  "CostCenter": "MC1001",
+	  "ProfitCenter": ""
+	},
+	{
+	  "Business": "Payroll",
+	  "CompanyCode": "1010",
+	  "FiscalYear": "30/11/2017",
+	  "JournalEntryType": "SA",
+	  "TransactionCurrency": "EUR",
+	  "Account": "21503000",
+	  "Debit": 1209.00,
+	  "Credit": 0,
+	  "CostCenter": "MC2020",
+	  "ProfitCenter": ""
+	},
+	{
+	  "Business": "Payroll",
+	  "CompanyCode": "1010",
+	  "FiscalYear": "30/11/2017",
+	  "JournalEntryType": "SA",
+	  "TransactionCurrency": "EUR",
+	  "Account": "21503000",
+	  "Debit": 980,
+	  "Credit": 0,
+	  "CostCenter": "MC2100",
+	  "ProfitCenter": ""
+	}
+
+  ]
+}

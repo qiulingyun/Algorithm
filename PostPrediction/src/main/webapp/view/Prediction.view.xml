@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form" controllerName="sap.predictpost.controller.Prediction">
+
+	<List id="predictionList" headerText="{i18n>predictionListTitle}"
+		class="sapUiResponsiveMargin" width="auto" 
+		items="{
+		         path : 'prediction>/Prediction',
+		         sorter : {
+		            path : 'Business' 
+		         }
+		      }">
+		<headerToolbar>
+			<Toolbar>
+				<Title text="{i18n>predictionListTitle}" />
+				<ToolbarSpacer />
+				<SearchField width="50%" search="onFilterPredictionList" />
+			</Toolbar>
+		</headerToolbar>
+		<items>
+			<ObjectListItem 
+				title="{prediction>Business}"
+			     
+				number="{
+							parts: [{path: 'prediction>Debit'}, {path: 'prediction>TransactionCurrency'}],
+							type: 'sap.ui.model.type.Currency',
+							formatOptions: {
+								showMeasure: false
+							}
+						}"
+				numberUnit="{prediction>TransactionCurrency}"
+				
+				
+			>
+				<attributes>
+					<ObjectAttribute text="{prediction>CompanyCode} {prediction>JournalEntryType}" />
+					<ObjectAttribute text="{prediction>FiscalYear}" />
+				</attributes>
+			</ObjectListItem>
+		</items>
+	</List>
+
+
+
+</mvc:View>
