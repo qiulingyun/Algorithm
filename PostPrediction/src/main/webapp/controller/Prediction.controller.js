@@ -23,6 +23,7 @@ sap.ui.define([
 				aFilter.push(new Filter("Business", FilterOperator.Contains, sQuery));
 			}
 
+			
 			// filter binding
 			var oList = this.byId("predictionList");
 			var oBinding = oList.getBinding("items");

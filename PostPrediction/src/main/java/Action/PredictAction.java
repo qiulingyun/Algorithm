@@ -3,14 +3,18 @@ package Action;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Case;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import Model.Header;
 import Model.LineItem;
 import Model.Post;
+import Model.Prediction;
+import Model.UserInput;
 import Service.PredictionService;
 
 @Controller
@@ -27,8 +33,78 @@ public class PredictAction {
 	@Autowired
 	private PredictionService predictionService;
 	
+	@RequestMapping(path="/test.do", method=RequestMethod.GET) 
+	public UserInput testMethod() {
+		return new UserInput();
+	}
+	@RequestMapping(path="/predict.do", method=RequestMethod.POST)
+	public String doPredict(UserInput input){
+//		ModelAndView modelAndView = new ModelAndView("PredictivePosting");
+		if(input == null){
+			return null;
+		}
+		// get user input
+		ArrayList<String> businessList = input.getBusiness();
+		String period = input.getPeriod();
+		if(period == null || period.isEmpty()){
+			return null;
+		}
+		HashMap<String, ArrayList<Post>> business2postMap = predictionService.getBusiness2postMap();
+		if(business2postMap == null || business2postMap.isEmpty()){
+			return null;
+		}
+		
+		
+		ArrayList<Prediction> predictionList = new ArrayList<Prediction>();
+		for(int i = 0; i < businessList.size(); i++){
+			String business = businessList.get(i);
+			
+			ArrayList<Post> postList = business2postMap.get(business);
+			if(postList == null){
+				continue;
+			}
+			
+			for(int j = 0; j < postList.size(); j++){
+				Post post = postList.get(i);
+				if(post == null){
+					continue;
+				}
+				Header header = post.getHeader();
+				ArrayList<LineItem> listItems = post.getLineItems();
+				if(header == null || listItems == null){
+					continue;
+				}
+				
+				Prediction prediction = new Prediction();
+				prediction.setBusiness(business);
+				prediction.setCompanyCode(header.getCompanyCode());
+				prediction.setFiscalYear(header.getFiscalYear());
+				prediction.setJournalEntryType(header.getJournalEntryType());
+				prediction.setTransactionCurrency(header.getTransactionCurrency());
+				
+				Long debit = 0L;
+				for(int k = 0; k < listItems.size(); k++){
+					LineItem lineItem = listItems.get(k);
+					if(lineItem == null){
+						continue;
+					}
+					debit += Long.getLong(lineItem.getDebit());
+				}
+				prediction.setDebit(String.valueOf(debit));
+				predictionList.add(prediction);
+			}
+		}
+		if(predictionList.isEmpty()){
+			return null;
+//			modelAndView.addObject("prediction", predictionList);
+		}
+		JSONObject json = new JSONObject();
+		json.put("perdiction", predictionList);
+		
+		return json.toString();
+
+	}
 	
-	@RequestMapping(value="/predict.do",method=RequestMethod.POST)
 	public ModelAndView processPredict(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		ModelAndView modelAndView = new ModelAndView("index");
 		if(predictionService == null || predictionService.isInitialized() == false){

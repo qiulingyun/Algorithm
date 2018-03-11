@@ -52,7 +52,6 @@
 			"invoice": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "Invoice.json"
-
 			}
 		}
 	}

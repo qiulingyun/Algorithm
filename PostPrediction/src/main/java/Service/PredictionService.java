@@ -122,8 +122,12 @@ public class PredictionService {
 		return postSuggestion;
 	}
 
-	public void setPostSuggestion(PostSuggestion postSuggestion) {
-		this.postSuggestion = postSuggestion;
+	public HashMap<String, ArrayList<Post>> getBusiness2postMap() {
+		return business2postMap;
+	}
+
+	public void setBusiness2postMap(HashMap<String, ArrayList<Post>> business2postMap) {
+		this.business2postMap = business2postMap;
 	}
 
 	public static void main(String[] args){

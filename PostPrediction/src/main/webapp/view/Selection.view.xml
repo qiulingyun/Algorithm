@@ -2,27 +2,24 @@
 <mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form" controllerName="sap.predictpost.controller.Selection">
 
-	<Panel headerText="{i18n>selectionPanelTitle}" class="sapUiResponsiveMargin"
-		width="auto">
+
+	<Panel headerText="{i18n>selectionPanelTitle}" class="sapUiResponsiveMargin" width="auto">
 		<content>
 			<VBox id="checkVBox">
-				<CheckBox text="{i18n>InterCompAdjustCheckBoxText}"
-					selected="businesstype>InterCompAdjust" />
-				<CheckBox text="{i18n>PayrollCheckBoxText}" selected="businesstype>Payroll" />
-				<CheckBox text="{i18n>AccrualCheckBoxText}" selected="businesstype>Accrual" />
-				<CheckBox text="{i18n>FinancialAdjustCheckBoxText}"
-					selected="businesstype>FinancialAdjust" />
+				<CheckBox id="checkBoxInterCompAdjust" text="{i18n>InterCompAdjustCheckBoxText}" />
+				<CheckBox id="checkBoxPayroll" text="{i18n>PayrollCheckBoxText}" />
+				<CheckBox id="checkBoxAccrual" text="{i18n>AccrualCheckBoxText}" />
+				<CheckBox id="checkBoxFinancialAdjust" text="{i18n>FinancialAdjustCheckBoxText}" />
 			</VBox>
 			<FlexBox alignItems="Start">
 				<items>
-					<SegmentedButton selectedKey="period"
-						class="sapUiResponsiveMargin">
+					<SegmentedButton id="periodSegmentedButton" selectedKey="today" class="sapUiResponsiveMargin">
 						<items>
-							<SegmentedButtonItem text="Today" key="period" />
-							<SegmentedButtonItem text="This Week" />
-							<SegmentedButtonItem text="This Month" />
-							<SegmentedButtonItem text="This Quarter" />
-							<SegmentedButtonItem text="This Year" />
+							<SegmentedButtonItem text="Today" key="today" />
+							<SegmentedButtonItem text="This Week" key="week" />
+							<SegmentedButtonItem text="This Month" key="month"/>
+							<SegmentedButtonItem text="This Quarter" key="quarter"/>
+							<SegmentedButtonItem text="This Year" key="year"/>
 						</items>
 						<layoutData>
 							<FlexItemData growFactor="2" />

@@ -5,14 +5,15 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/m/MessageToast",
 			return Controller.extend("sap.predictpost.controller.Selection", {
 				onInit : function() {
 					// set data model on view
-					var oData = {
-						InterCompAdjust : false,
-						Payroll : false,
-						Accrual : false,
-						FinancialAdjust : false
-					};
-					var oModel = new JSONModel(oData);
-					this.getView().setModel(oModel, "businesstype");
+					// var oData = {
+					// InterCompAdjust : false,
+					// Payroll : false,
+					// Accrual : false,
+					// FinancialAdjust : false
+					// };
+					// var oModel = new JSONModel(oData);
+					// this.byId("check1").setModel(oModel);
+					// this.getView().setModel(oModel, "businesstype");
 
 					// set i18n model on view
 					var i18nModel = new ResourceModel({
@@ -41,10 +42,62 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/m/MessageToast",
 					});
 					predictionModel.loadData("Prediction.json");
 					this.getView().setModel(predictionModel, "prediction");
+					
+					
+					var userInput = {
+						business : new Array(),
+						period : ""
+					};
+					//get check box data
+					if(this.byId("checkBoxInterCompAdjust").getSelected()){
+						userInput.business.push("Intercompany Adjustment");
+					}else if(this.byId("checkBoxPayroll").getSelected()){
+						userInput.business.push("Payroll");
+					}else if(this.byId("checkBoxAccrual").getSelected()){
+						userInput.business.push("Accrual");
+					}else if(this.byId("checkBoxFinancialAdjust").getSelected()){
+						userInput.business.push("Financial Adjustment");
+					}
+					
+					//get segmented button data
+					userInput.period = this.byId("periodSegmentedButton").getSelectedKey();
 
-					var test1 = this.getView().getModel("businesstype")
-							.getProperty("/InterCompAdjust");
-					MessageToast.show(test1);
+//					var markers = [ {
+//						"position" : "128.3657142857143",
+//						"markerPosition" : "7"
+//					}, {
+//						"position" : "235.1944023323615",
+//						"markerPosition" : "19"
+//					}, {
+//						"position" : "42.5978231292517",
+//						"markerPosition" : "-3"
+//					} ];
+
+					$.ajax({
+						type : "POST",
+						url : "/PostPrediction/predict.do",
+						// The key needs to match your method's input parameter
+						// (case-sensitive).
+						data : JSON.stringify({
+							UserInput : userInput
+						}),
+						contentType : "application/json; charset=utf-8",
+						dataType : "json",
+						success : function(data) {
+							alert(data);
+						},
+						failure : function(errMsg) {
+							alert(errMsg);
+						}
+					});
+//					var odataModel = new sap.ui.model.odata.v2.ODataModel(
+//							"http://localhost:8080/PostPrediction");
+//					odataModel.callFunction("/predict.do", {
+//						method : "POST",
+//						urlParameters : checkBoxData
+//					});
+
+//					MessageToast.show(checkBoxData.InterCompAdjust);
 				},
 				updateModelData : function(modelData) {
 					console.debug("Ajax response: ", modelData);

@@ -7,10 +7,7 @@
 	  "JournalEntryType": "SA",
 	  "TransactionCurrency": "USD",
 	  "Account": "11001010",
-	  "Debit": 100,
-	  "Credit": 0,
-	  "CostCenter": "",
-	  "ProfitCenter": ""
+	  "Debit": 100
 	},
 	{
 	  "Business": "Payroll",
@@ -19,10 +16,7 @@
 	  "JournalEntryType": "SA",
 	  "TransactionCurrency": "EUR",
 	  "Account": "21503000",
-	  "Debit": 200,
-	  "Credit": 0,
-	  "CostCenter": "MC1001",
-	  "ProfitCenter": ""
+	  "Debit": 200
 	},
 	{
 	  "Business": "Payroll",
@@ -31,10 +25,7 @@
 	  "JournalEntryType": "SA",
 	  "TransactionCurrency": "EUR",
 	  "Account": "21503000",
-	  "Debit": 1209.00,
-	  "Credit": 0,
-	  "CostCenter": "MC2020",
-	  "ProfitCenter": ""
+	  "Debit": 1209.00
 	},
 	{
 	  "Business": "Payroll",
@@ -43,11 +34,7 @@
 	  "JournalEntryType": "SA",
 	  "TransactionCurrency": "EUR",
 	  "Account": "21503000",
-	  "Debit": 980,
-	  "Credit": 0,
-	  "CostCenter": "MC2100",
-	  "ProfitCenter": ""
+	  "Debit": 980
 	}
-
   ]
 }
