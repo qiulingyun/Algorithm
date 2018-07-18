@@ -1,6 +1,7 @@
 package WebCrawler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,7 +10,7 @@ import org.jsoup.select.Elements;
 
 public class WebCrawlerTester {
 
-	private static final int QUESTION_NUM = 20;
+	private static final int QUESTION_NUM = 2;
 	private static final int ANSWER_NUM = 3;
 	
 	public static void main(String[] args)throws IOException {
@@ -44,23 +45,48 @@ public class WebCrawlerTester {
 //                		.select("div.QuestionHeader-main").select("div:nth-child(4)").select("div").select("div").select("div")
 //                		.select("span").select("p:nth-child(1)");
                 //回答
-                Elements answerBest=document2.select("#root").select("div").select("main").select("div").select("div.Question-main").select("div.Question-mainColumn")
-                		.select("div.Card.AnswerCard").select("div").select("div")
-                		.select("div.RichContent.RichContent--unescapable").select("div.RichContent-inner").select("span");
+//                Elements answerBest=document2.select("#root").select("div").select("main").select("div").select("div.Question-main").select("div.Question-mainColumn")
+//                		.select("div.Card.AnswerCard").select("div").select("div")
+//                		.select("div.RichContent.RichContent--unescapable").select("div.RichContent-inner").select("span");
                 
                 System.out.println("\n"+"链接："+URL
-                        +"\n"+"标题："+title.text()
+                        +"\n"+"标题："+title.text());
 //                        +"\n"+"问题描述："+detail.text()
-                        +"\n"+"置顶回答："+answerBest.text());
-                for(int j = 2; j <= ANSWER_NUM; j++){
-                	String answerDiv = "div:nth-child(" + j + ")";
-                	Elements answerOther=document2.select("#root").select("div").select("main").select("div").select("div.Question-main").select("div.Question-mainColumn")
-                    		.select("div.Card.MoreAnswers").select("div").select(answerDiv).select("div")
-                    		.select("div.RichContent.RichContent--unescapable").select("div.RichContent-inner").select("span");
-                	System.out.println( "其他回答"+(j-1)+": "+ answerOther.text() );
-                    
+//                        +"\n"+"置顶回答："+answerBest.text());
+                Elements answers=document2.select("#QuestionAnswers-answers").select("div").select("div");
+                int j = 1;
+                ArrayList<String> answerList = new ArrayList<String>();
+                String lastAnswer = null;
+                for(Element answer:answers){
+                	Elements answerContent = answer.select("div").select("div.RichContent.RichContent--unescapable").select("div.RichContent-inner").select("span");
+                	String ans = answerContent.text();
+                	if(ans == null || ans.isEmpty()){
+                		continue;
+                	}
+                	if(lastAnswer == null || !lastAnswer.equals(ans)){
+                		if(j > ANSWER_NUM){
+                			break;
+                		}
+                		answerList.add(ans);
+                		lastAnswer = ans;
+                		j++;
+                	}
+//                	System.out.println( "回答"+(j)+": "+ answerContent.text() );
+                	
+                }
+                for(String ansStr:answerList){
+                	System.out.println( "回答: "+ ansStr );
                 }
                 
+//                for(int j = 1; j <= ANSWER_NUM; j++){
+//                	String answerDiv = "div:nth-child(" + j + ")";
+//                	Elements answerOther=document2.select("#QuestionAnswers-answers").select("div").select("div")
+//                    		             .select("div:nth-child(2)").select("div").select(answerDiv).select("div")
+//                    		             .select("div.RichContent.RichContent--unescapable").select("div.RichContent-inner").select("span");
+//                	System.out.println( "回答"+(j)+": "+ answerOther.text() );
+//                    
+//                }
+                               
                 
             } 
         }
