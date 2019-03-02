@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd" >
+        
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 上传文件大小限制，单位为字节-10Mb -->
+        <property name="maxUploadSize">
+            <value>10485760</value>
+        </property>
+        <!-- 请求的编码格式 -->
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+    </bean>
+
+<!-- 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 		<property name="prefix"> -->
+<!-- 			<value>/</value> -->
+<!-- 		</property> -->
+<!-- 		<property name="suffix"> -->
+<!-- 			<value>.html</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+
+<!-- 默认装配 -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
+    <bean id="uploadAction" class="Action.UploadAction"></bean>
+    <bean id="predictAction" class="Action.PredictAction"></bean>
+    <bean id="predictionService" class="Service.PredictionService"></bean>
+    <bean id="postSuggestion" class="Suggestion.PostSuggestion"></bean>
+    
+	<!--Request Mapping -->
+<!-- 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> -->
+<!-- 		<property name="mappings"> -->
+<!-- 			<props> -->
+<!-- 				<prop key="/upload.do">uploadAction</prop> -->
+<!-- 			</props> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	
+	<!---Action Definition -->
+<!-- 	<bean id="uploadAction" class="Action.UploadAction"> -->
+<!-- 		<property name="failView">  -->
+<!-- 			<value>loginfail</value> -->
+<!-- 		</property> -->
+<!-- 		<property name="successView"> -->
+<!-- 			<value>loginsuccess</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+</beans>
